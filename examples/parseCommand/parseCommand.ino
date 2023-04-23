@@ -19,9 +19,12 @@
 
 Reefwing_xIMU3 rx;
 
+//  Custom Command Hashes
+#define blinkLED  507
+
 Ping pingPacket;
-bool strobe = false;
-const long strobePeriod = 5000;       //  5 seconds
+bool strobe = false, blink = false;
+const long strobePeriod = 5000, blinkPeriod = 1000;       
 unsigned long previousMillis = 0;
 
 void parseCommand() {
@@ -68,6 +71,16 @@ void parseCommand() {
       digitalWrite(LED_BUILTIN, HIGH);
       previousMillis = millis();
       break;
+    case blinkLED:
+      char *cmdValue = rx.getValue();
+
+      rx.sendResponse("blinkLED", cmdValue);
+      rx.sendNotification("Custom Command Received - blinkLED");
+      rx.sendNotification(cmdValue);
+      blink = true;
+      digitalWrite(LED_BUILTIN, HIGH);
+      previousMillis = millis();
+      break;
     default:
       char msg[100] = "Unhandled x-IMU3 command - ";
       
@@ -89,7 +102,7 @@ void setup() {
   pingPacket.dName = "Arduino";
   pingPacket.sNumber = "0123-4567"; 
 
-  //  Used for strobe command
+  //  Used for strobe and blink command
   pinMode(LED_BUILTIN, OUTPUT);
 }
 
@@ -104,6 +117,12 @@ void loop() {
     if (millis() - previousMillis >= strobePeriod) {
       digitalWrite(LED_BUILTIN, LOW);
       strobe = false;
+    }
+  }
+
+  if (blink) {
+    if (millis() - previousMillis >= blinkPeriod) {
+      digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
     }
   }
 }
