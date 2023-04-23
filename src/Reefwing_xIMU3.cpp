@@ -282,7 +282,7 @@ void Reefwing_xIMU3::checkForCommand() {
           }
           if (buffer[i] == END_OBJ) { 
             state = END_VALUE; 
-            _val[index] = NULL_TERMINATOR;
+            _value[index] = NULL_TERMINATOR;
           }
           else {
             _value[index] = buffer[i];
@@ -297,7 +297,7 @@ void Reefwing_xIMU3::checkForCommand() {
   }
   else {
     _cmd[0] = NULL_TERMINATOR;
-    _val[0] = NULL_TERMINATOR;
+    _value[0] = NULL_TERMINATOR;
   }
 }
 
