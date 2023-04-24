@@ -114,6 +114,4 @@ struct RSSIData {
   float power;
 };
 
-
-
 #endif

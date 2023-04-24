@@ -58,7 +58,6 @@ public:
   char* getValue();
   ValueType getValueType();
   
-
 private:
   ValueType parseValueType(char c);
   

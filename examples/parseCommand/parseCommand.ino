@@ -71,15 +71,23 @@ void parseCommand() {
       digitalWrite(LED_BUILTIN, HIGH);
       previousMillis = millis();
       break;
-    case blinkLED:
+    case blinkLED: {
       char *cmdValue = rx.getValue();
+      char msg[100] = "Custom Command Received - blinkLED - ";
 
       rx.sendResponse("blinkLED", cmdValue);
-      rx.sendNotification("Custom Command Received - blinkLED");
-      rx.sendNotification(cmdValue);
-      blink = true;
-      digitalWrite(LED_BUILTIN, HIGH);
-      previousMillis = millis();
+      rx.sendNotification(strcat(msg, cmdValue));
+
+      if (strcasecmp("true", cmdValue) == 0) {
+        blink = true;
+        digitalWrite(LED_BUILTIN, HIGH);
+        previousMillis = millis(); 
+      }
+      else {
+        blink = false;
+        digitalWrite(LED_BUILTIN, LOW);
+      }
+    }
       break;
     default:
       char msg[100] = "Unhandled x-IMU3 command - ";
@@ -123,6 +131,7 @@ void loop() {
   if (blink) {
     if (millis() - previousMillis >= blinkPeriod) {
       digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
+      previousMillis = millis();
     }
   }
 }

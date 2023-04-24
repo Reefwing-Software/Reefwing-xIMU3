@@ -1,4 +1,4 @@
-![version](https://img.shields.io/github/v/tag/Reefwing-Software/Reefwing-LSM9DS1) ![license](https://img.shields.io/badge/license-MIT-green) ![release](https://img.shields.io/github/release-date/Reefwing-Software/Reefwing-LSM9DS1?color="red") ![open source](https://badgen.net/badge/open/source/blue?icon=github)
+![version](https://img.shields.io/github/v/tag/Reefwing-Software/Reefwing-xIMU3) ![license](https://img.shields.io/badge/license-GPL-green) ![release](https://img.shields.io/github/release-date/Reefwing-Software/Reefwing-xIMU3?color="red") ![open source](https://badgen.net/badge/open/source/blue?icon=github)
 
 # Reefwing xIMU3 GUI
 
@@ -96,7 +96,7 @@ struct InertialMessage {
 The available xIMU3 data message methods in our library are:
 
 ``` c++
-void sendInertial(InertialMessage msg);
+  void sendInertial(InertialMessage msg);
   void sendMag(ScaledData data);
   void sendTemperature(TempData data);
   void sendQuaternion(Quaternion quaternion);
@@ -411,10 +411,60 @@ Command messages are a `JSON` object containing a single key/value pair, termina
 {"serialNumber":null}\r\n
 ```
 
-This sketch illustrates one method of handling those commands when received by your Arduino.
+This sketch illustrates one method of handling those commands when received by your Arduino. Most of the hard work is done by the `parseCommand()` function. We have tried to provide a representative sample of the commands you would want to respond to.
 
 You can get a heap of commands sent by clicking on the download icon in the bottom left of the x-IMU3 GUI. The tool tip for this icon is `Read Settings from Device`.
 
-The other way to send commands is from the GUI tool bar. You can send a `shutdown` command, by clicking on the power button icon. The icon next to the power button icon, looks like: `{;}`. You can send this to send custom commands.
+The other way to send commands is from the GUI tool bar. You can send a `shutdown` command, by clicking on the power button icon. The icon next to the power button icon, looks like: `{;}`. You can use this to send standard or custom commands.
 
+Standard commands that are already in the hash table in `xIMU3_Protocol.h`, can be handled by including them in the `parseCommand()` example function. When your Arduino receives a command the GUI expects it to respond by sending back the command key and value sent. You can use the `sendResponse()` methods for this. If you don't respond to the command message, the GUI will send it again, for a total of three attempts.
 
+If you want to send custom message types (i.e., ones not defined by the x-IMU3 API) from the GUI to your Arduino, you will first need to calculate the hash of your new command. You can use the `commandHashes` example sketch for this purpose. To demonstrate this capability, we added the custom command: `blinkLED` to the parseCommand sketch. If you send this command from the GUI with the value true (e.g., `{"blinkLED":true}`), the Arduino will start blinking its built in LED at one second intervals. To turn off blinking, send the custom command:
+
+``` JSON
+{"blinkLED":false}
+```
+
+All command messages have a key, and most have `null` for the value, but some (e.g., `note` and `heading`) include a string, number or boolean in addition to the key. The Reefwing_xIMU3 library provides three methods to assist with processing the JSON encoded messages. Two of these are used in the `parseCommand` sketch, to extract the command key and value.
+
+``` c++
+Reefwing_xIMU3 rx;
+
+char *cmdPtr = rx.getCommand();
+char *cmdValue = rx.getValue();
+```
+
+The other method that may be useful is `getValueType()`. This will return a ValueType, which indicates what type the value is. The value is stored as a c string, so you may need to convert it to this JSON type, before use. In the example sketch, when handling `blinkLED` we convert the string value to a bool.
+
+``` c++
+enum ValueType {
+  JSON_STRING = 0,
+  JSON_NUMBER,
+  JSON_BOOL,
+  JSON_NULL,
+  JSON_UNDEFINED
+};
+```
+
+### Stream IMU ###
+
+This sketch demonstrates how to stream real-time IMU data to the x-IMU3 GUI. For the example, we have used our LSM9DS1 Library with an Arduino Nano 33 BLE. The [Reefwing LSM9DS1 Library](https://github.com/Reefwing-Software/Reefwing-LSM9DS1), already includes the [Reefwing-imuTypes Library](https://github.com/Reefwing-Software/Reefwing-imuTypes). The imuTypes Library has the structs and class required to pass data into the serial transmission methods.
+
+If you are using a different IMU Library, then you can include the Reefwing-imuTypes Library, or just declare the structures you need in the sketch. For example, if you want to stream gyroscope and accelerometer data, you need the `InertialMessage` struct.
+
+``` c++
+struct InertialMessage {
+  float ax, ay, az;
+  float gx, gy, gz;
+  uint32_t timeStamp;
+};
+```
+
+If you want to send magnetometer data, then you need the `ScaledData` struct.
+
+``` c++
+struct ScaledData {
+  float sx, sy, sz;
+  uint32_t  timeStamp;
+};
+```

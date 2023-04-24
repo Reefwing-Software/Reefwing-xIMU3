@@ -5,10 +5,10 @@
   @copyright  Please see the accompanying LICENSE file
 
   Code:        David Such
-  Version:     1.0.0
-  Date:        13/04/23
+  Version:     1.1.0
+  Date:        24/04/23
 
-  1.0.0     Original Release.       13/04/23
+  1.1.0     Original Release.       24/04/23
 
   Credit - Derived from the x-IMU-Arduino-Example by Seb Madgwick
            (https://github.com/xioTechnologies/x-IMU-Arduino-Example)
@@ -20,8 +20,11 @@
 #ifndef xIMU3_Protocol_h
 #define xIMU3_Protocol_h
 
-#define xIMU3_API_VERSION_MAJOR   1
-#define xIMU3_API_VERSION_MINOR   0
+//  Based on API v1.1 - https://x-io.co.uk/downloads/x-IMU3-User-Manual-v1.1.pdf
+
+#define xIMU3_API_VERSION_MAJOR     1
+#define xIMU3_API_VERSION_MINOR     1
+#define xIMU3_API_VERSION_REVISION  0
 
 /******************************************************************
  *

@@ -7,17 +7,55 @@
 #######################################
 
 ReefwingxIMU3 KEYWORD1
-
+InertialMessage KEYWORD1
+ScaledData  KEYWORD1
+TempData    KEYWORD1
+Quaternion  KEYWORD1
+EulerAngles KEYWORD1
+BatteryData KEYWORD1
+RSSIData    KEYWORD1
+NetworkAnnouncement KEYWORD1
+Ping    KEYWORD1
+ValueType   KEYWORD1
+ErrorCode   KEYWORD1
+BattAndThermStruct  KEYWORD1
+ChargingStatus  KEYWORD1
+SerialMode  KEYWORD1
+TokenState  KEYWORD1
+CommandTokens   KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
 
-begin  KEYWORD2
-
+sendInertial    KEYWORD2
+sendMag KEYWORD2
+sendTemperature KEYWORD2
+sendQuaternion  KEYWORD2
+sendEulerAngles KEYWORD2
+sendBattery KEYWORD2
+sendRSSI    KEYWORD2
+sendNotification    KEYWORD2
+sendError   KEYWORD2
+sendNetworkAnnouncement KEYWORD2
+sendPing    KEYWORD2
+sendResponse    KEYWORD2
+hash    KEYWORD2
+checkForCommand KEYWORD2
+newCommand  KEYWORD2
+getCommand  KEYWORD2
+getValue    KEYWORD2
+getValueType    KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
 #######################################
 
-NONE    LITERAL1
+HASH_SIZE   LITERAL1
+BUFFER_SIZE LITERAL1
+CMD_SIZE    LITERAL1
+NOTE_SIZE   LITERAL1
+NULL_TERMINATOR LITERAL1
+xIMU3_API_VERSION_MAJOR LITERAL1
+xIMU3_API_VERSION_MINOR LITERAL1
+xIMU3_API_VERSION_REVISION  LITERAL1
