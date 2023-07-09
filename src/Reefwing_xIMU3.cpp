@@ -80,13 +80,13 @@ void Reefwing_xIMU3::sendQuaternion(Quaternion quaternion) {
   Serial.print("Q,");
   Serial.print(quaternion.timeStamp);
   Serial.print(",");
-  Serial.print(quaternion.q[0], 4);
+  Serial.print(quaternion.q0, 4);
   Serial.print(",");
-  Serial.print(quaternion.q[1], 4);
+  Serial.print(quaternion.q1, 4);
   Serial.print(",");
-  Serial.print(quaternion.q[2], 4);
+  Serial.print(quaternion.q2, 4);
   Serial.print(",");
-  Serial.print(quaternion.q[3], 4);
+  Serial.print(quaternion.q3, 4);
   Serial.print("\r\n");
 }
 

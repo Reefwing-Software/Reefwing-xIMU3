@@ -267,42 +267,74 @@ With a hash table of the command keys that we want to respond to, we can now rec
 
 ``` c++
 void parseCommand() {
-  char *cmdPtr = cmd;
+  char *cmdPtr = rx.getCommand();
 
-  switch(hash(cmdPtr) % HASH_SIZE) {
+  switch(rx.hash(cmdPtr) % HASH_SIZE) {
     case xIMU3_ping:
-      sendPing("Raven");
+      rx.sendPing(pingPacket);
       break;
     case xIMU3_deviceName:
-      sendCommand("deviceName", "Raven");
+      rx.sendResponse("deviceName", "Arduino");
       break;
     case xIMU3_serialNumber:
-      sendCommand("serialNumber", "0123-4567");
+      rx.sendResponse("serialNumber", "0123-4567");
       break;
     case xIMU3_firmwareVersion:
-      sendCommand("firmwareVersion", "v1.0");
+      rx.sendResponse("firmwareVersion", "v1.0");
       break;
     case xIMU3_bootloaderVersion:
-      sendCommand("bootloaderVersion", "Rel: 4.0.2");
+      rx.sendResponse("bootloaderVersion", "Rel: 4.0.2");
       break;
     case xIMU3_hardwareVersion:
-      sendCommand("hardwareVersion", "v1.0");
+      rx.sendResponse("hardwareVersion", "v1.0");
       break;
     case xIMU3_serialMode:
-      sendCommand("serialMode", STANDARD);
+      rx.sendResponse("serialMode", STANDARD);
       break;
     case xIMU3_serialBaudRate:
-      sendCommand("serialBaudRate", 115200);
+      rx.sendResponse("serialBaudRate", 115200);
       break;
     case xIMU3_serialRtsCtsEnabled:
-      sendCommand("serialRtsCtsEnabled", "false");
+      rx.sendResponse("serialRtsCtsEnabled", "false");
+      break;
+    case xIMU3_note:
+      rx.sendResponse("note", rx.getValue());
+      break;
+    case xIMU3_shutdown:
+      //  Shutdown Arduino command received
+      rx.sendResponse("shutdown", "true");
+      break;
+    case xIMU3_strobe:
+      rx.sendResponse("strobe", "null");
+      strobe = true;
+      digitalWrite(LED_BUILTIN, HIGH);
+      previousMillis = millis();
+      break;
+    case blinkLED: {
+      char *cmdValue = rx.getValue();
+      char msg[100] = "Custom Command Received - blinkLED - ";
+
+      rx.sendResponse("blinkLED", cmdValue);
+      rx.sendNotification(strcat(msg, cmdValue));
+
+      if (strcasecmp("true", cmdValue) == 0) {
+        blink = true;
+        digitalWrite(LED_BUILTIN, HIGH);
+        previousMillis = millis(); 
+      }
+      else {
+        blink = false;
+        digitalWrite(LED_BUILTIN, LOW);
+      }
+    }
       break;
     default:
       char msg[100] = "Unhandled x-IMU3 command - ";
       
-      sendError(strcat(msg, cmdPtr));
+      rx.sendError(strcat(msg, cmdPtr));
       break;
   }
+  
 }
 ```
 
@@ -354,7 +386,7 @@ void setup() {
 }
 ```
 
-The code, `while (!Serial)`, is not required for boards with an FT232 chip or other USB to Serial bridge (e.g., Uno, and Mega2560). This because these boards will reset when they receive a DTR serial command.
+The code, `while (!Serial)`, is not required for boards with an FT232 chip or other USB to Serial bridge (e.g., Uno, and Mega2560). This is because these boards will reset when they receive a DTR serial command.
 
 The code within `loop()` will depend on your sketch objectives. You will either be sending data messages, responding to commands or a combination of both. Refer to the library examples.
 
