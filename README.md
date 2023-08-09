@@ -27,9 +27,13 @@ so can be used to divide a byte stream into individual messages.
 Some messages are terminated with an additional Carriage Return (CR) 
 control character.
 
-The first byte of a message indicates the message type. Command messages start with the character "{" (0x7B in hex, 123 in decimal). 
-Data messages start with either an uppercase character or a byte value greater than 0x80 (128 in decimal) depending on the message.
-You could use the command messages to control your Arduino from the x-IMU3 GUI, and we will demonstrate how to read and parse the commands from the serial port, but first let's look at data messages.
+The first byte of a message indicates the message type. Command messages 
+start with the character "{" (0x7B in hex, 123 in decimal). Data messages 
+start with either an uppercase character or a byte value greater than 0x80 
+(128 in decimal) depending on the message. You could use the command messages 
+to control your Arduino from the x-IMU3 GUI, and we will demonstrate how 
+to read and parse the commands from the serial port, but first let's look 
+at data messages.
 ```
 
 You could use the command messages to control your Arduino from the x-IMU3 GUI, and we will demonstrate how to read and parse the commands from the serial port, but first let's look at data messages.
