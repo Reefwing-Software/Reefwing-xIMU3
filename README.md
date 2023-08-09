@@ -2,7 +2,7 @@
 
 # Reefwing xIMU3 GUI
 
- An Arduino Library to facilitate serial communication with the xIMU3 GUI data visualisation software. The Reefwing xIMU3_GUI Library is available from the Arduino IDE Library Manager of from our GitHub repository.
+ An Arduino Library to facilitate serial communication with the xIMU3 GUI data visualisation software. The Reefwing xIMU3_GUI Library is available from the Arduino IDE Library Manager or from our GitHub repository.
 
 ## x-IO Technologies & the x-IMU3 GUI
 
