@@ -5,10 +5,11 @@
   @copyright  Please see the accompanying LICENSE file
 
   Code:        David Such
-  Version:     1.0.0
+  Version:     1.1.0
   Date:        13/04/23
 
   1.0.0     Original Release.       13/04/23
+  1.1.0     Updated Serial Msg      09/08/23
 
   Credit - Derived from the x-IMU-Arduino-Example by Seb Madgwick
            (https://github.com/xioTechnologies/x-IMU-Arduino-Example)
